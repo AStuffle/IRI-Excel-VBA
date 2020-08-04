@@ -1,0 +1,130 @@
+Sub data_copy_sum()
+'
+
+' Clears data from C4:V4
+    Range("C4:V4").Select
+    Selection.ClearContents
+    
+' Switches to the other active workbook (your data file) and copy/pastes sum data as values into C4:V4
+    ActiveWindow.ActivateNext
+    Range("B6:U6").Select
+    Selection.Copy
+    ActiveWindow.ActivateNext
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Range("A6").Select
+    
+End Sub
+Sub data_copy()
+'
+
+' Deletes all but the first row in your report workbook, then copies the values from the data workbook.
+    
+' Deleting the 2nd row and down in the report workbook. Preserves the first row for formatting.
+    Range("A7").Select
+    Range(Selection, ActiveCell.SpecialCells(xlLastCell)).Select
+    Selection.EntireRow.Delete
+    
+' Switches to the other active workbook (your data file) and copy/pastes data as values into B6
+    ActiveWindow.ActivateNext
+    Range("A7").Select
+    Range(Selection, ActiveCell.SpecialCells(xlLastCell)).Select
+    Selection.Copy
+    Range("A1").Select
+    ActiveWindow.ActivateNext
+    Range("B6").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Range("A6").Select
+    
+End Sub
+Sub data_copy_segments()
+' less crazy than the normal data copy, since it's a small tab.
+
+' Selects the data in the segments tab and clears it, preserving formatting.
+    Range("B6:T18").Select
+    Selection.ClearContents
+    Range("B6").Select
+    
+' Switches to the other workbook and copy/pastes data as values
+    ActiveWindow.ActivateNext
+    Range("A6:S18").Select
+    Selection.Copy
+    ActiveWindow.ActivateNext
+    Range("B6").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Range("A6").Select
+    
+End Sub
+Sub fix_formatting()
+'
+
+' Selects the first row of data, then copies the formatting to the end of the file.
+    Range("A6:V6").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Range(Selection, ActiveCell.SpecialCells(xlLastCell)).Select
+    Selection.PasteSpecial Paste:=xlPasteFormats, Operation:=xlNone, _
+        SkipBlanks:=False, Transpose:=False
+    Application.CutCopyMode = False
+    Range(Selection, ActiveCell.SpecialCells(xlLastCell)).Select
+End Sub
+Sub number_rows()
+' Adds rank numbers to every row.
+
+    ActiveCell.FormulaR1C1 = "1"
+    Range("A7").Select
+    ActiveCell.FormulaR1C1 = "2"
+    Range("A6:A7").Select
+    Range("A7").Activate
+    Selection.AutoFill Destination:=Range("A6:A" & Range("E" & Rows.Count).End(xlUp).Row)
+    Range(Selection, Selection.End(xlDown)).Select
+    Range("A6").Select
+    
+End Sub
+Sub advance_tabs()
+' Switches both active workbooks to the next tab.
+
+    ActiveSheet.Next.Select
+    ActiveWindow.ActivateNext
+    ActiveSheet.Next.Select
+    ActiveWindow.ActivateNext
+    
+End Sub
+Sub prepare_all()
+' Runs all subroutines for each tab.
+
+' Brewers
+    Call data_copy_sum
+    Call data_copy
+    Call fix_formatting
+    Call number_rows
+    Call advance_tabs
+    
+' Families
+    Call data_copy
+    Call fix_formatting
+    Call number_rows
+    Call advance_tabs
+
+' Brands
+    Call data_copy
+    Call fix_formatting
+    Call number_rows
+    Call advance_tabs
+
+' Packages
+    Call data_copy
+    Call fix_formatting
+    Call number_rows
+    Call advance_tabs
+    
+' Segments
+    Call data_copy_segments
+    'Call fix_formatting
+    'Call number_rows
+    'Call advance_tabs
+    
+End Sub
+
