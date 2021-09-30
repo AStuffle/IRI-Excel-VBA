@@ -60,7 +60,7 @@ Sub data_copy_segments()
 ' Less crazy than the normal data copy, since it's a small tab.
 
 ' Selects the data in the segments tab and clears it, preserving formatting.
-    Range("B6:T19").Select
+    Range("A6:T19").Select
     Selection.ClearContents
     Range("B6").Select
     
@@ -149,6 +149,11 @@ Sub home_cell()
     Range("A7").Select
     ActiveSheet.Previous.Select
     Range("A7").Select
+    
+    'Uncomment this one for sheets with the Kombucha tab!
+    ActiveSheet.Previous.Select
+    Range("A7").Select
+
     ActiveSheet.Previous.Select
     Range("A6").Select
     ActiveSheet.Previous.Select
@@ -278,6 +283,7 @@ Sub A_PREPARE_ALL()
     
 ' Segments
     Call data_copy_segments
+    Call number_rows
         
 ' Pivot Data Prep
     Call get_pivot_data
@@ -292,4 +298,3 @@ Sub B_FINALIZE_ALL()
     Call home_cell
 
 End Sub
-
